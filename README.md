@@ -16,3 +16,9 @@ Create the RBAC permissions and the service account
 ```sh
 kubectl apply -f shell-operator-rbac.yaml
 ```
+
+# TODO
+
+- add more documentation
+- add build step for image and testing
+- clean up the code
