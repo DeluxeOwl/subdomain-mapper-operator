@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: automatic-nginx-subdomain
+  name: some-nginx-pod
+spec:
+  containers:
+  - image: nginx:alpine
+    name: nginx
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: automatic-nginx-subdomain
+  name: automatic-nginx-subdomain
+  annotations:
+    subdomain-mapper/ingress: "main-ingress"
+spec:
+  ports:
+    - name: 80-80
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: automatic-nginx-subdomain
+  type: ClusterIP
