@@ -1,4 +1,4 @@
-# ingress-subdomain-operator (IN-PROGRESS)
+# subdomain-mapper-operator (IN-PROGRESS)
 
 This operator patches an ingress to automatically create subdomains for services based on annotations.
 
@@ -6,7 +6,7 @@ The services must have the following annotation:
 
 ```yaml
 annotations:
-  automatic-subdomain/ingress: "your-ingress-name"
+  subdomain-mapper/ingress: "your-ingress-name"
 ```
 
 ## Requirements
@@ -14,7 +14,8 @@ annotations:
 Create the RBAC permissions and the service account
 
 ```sh
-kubectl apply -f shell-operator-rbac.yaml
+kubectl apply -f rbac.yaml
+kubectl apply -f operator.yaml
 ```
 
 # TODO

@@ -2,13 +2,13 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: monitor-services-acc
+  name: subdomain-mapper-acc
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: monitor-services
+  name: subdomain-mapper
 rules:
   - apiGroups: [""]
     resources: ["services"]
@@ -21,12 +21,12 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: monitor-services
+  name: subdomain-mapper
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: monitor-services
+  name: subdomain-mapper
 subjects:
   - kind: ServiceAccount
-    name: monitor-services-acc
+    name: subdomain-mapper-acc
     namespace: default

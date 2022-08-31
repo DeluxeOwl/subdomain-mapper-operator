@@ -5,7 +5,7 @@ metadata:
     app: example-service
   name: example-service
   annotations:
-    automatic-subdomain/ingress: "main-ingress"
+    subdomain-mapper/ingress: "main-ingress"
 spec:
   ports:
     - name: 80-80

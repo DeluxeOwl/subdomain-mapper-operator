@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: subdomain-mapper-operator
+spec:
+  containers:
+    - name: subdomain-mapper-operator
+      image: nospamplease/subdomain-mapper:v1
+      imagePullPolicy: Always
+  serviceAccountName: subdomain-mapper-acc
