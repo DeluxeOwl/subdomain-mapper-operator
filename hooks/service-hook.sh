@@ -26,9 +26,10 @@ else
   for IND in `seq 0 $ARRAY_COUNT`
   do
     ingressName=`jq -r ".[$IND].object.metadata.annotations[\"subdomain-mapper/ingress\"]" $BINDING_CONTEXT_PATH`
+    domainName=`jq -r ".[$IND].object.metadata.annotations[\"subdomain-mapper/domain\"]" $BINDING_CONTEXT_PATH`
 
     # ignore if it doesn't have the annotation
-    if [[ "${ingressName}" == "null" ]]; then
+    if [[ "${ingressName}" == "null" || "${domainName}" == "null" ]]; then
       exit 0
     fi
     
@@ -39,17 +40,17 @@ else
     case "${resourceEvent}" in
       "Modified")
         echo "Ingress name annotation modified on ${serviceName}: [subdomain-mapper/ingress: ${ingressName}]"
-        kubectl patch ingress $ingressName --type "json" -p "[{'op':'add','path':'/spec/rules/-','value':{'host':'${serviceName}.andreisurugiu.com','http':{'paths':[{'backend':{'service':{'name':'${serviceName}','port':{'number':80}}},'path':'/','pathType':'Prefix'}]}}}]"
+        kubectl patch ingress $ingressName --type "json" -p "[{'op':'add','path':'/spec/rules/-','value':{'host':'${serviceName}.${domainName}','http':{'paths':[{'backend':{'service':{'name':'${serviceName}','port':{'number':80}}},'path':'/','pathType':'Prefix'}]}}}]"
       ;;
 
       "Added")
         echo "Service ${serviceName} was created: [subdomain-mapper/ingress: ${ingressName}]"
-        kubectl patch ingress $ingressName --type "json" -p "[{'op':'add','path':'/spec/rules/-','value':{'host':'${serviceName}.andreisurugiu.com','http':{'paths':[{'backend':{'service':{'name':'${serviceName}','port':{'number':80}}},'path':'/','pathType':'Prefix'}]}}}]"
+        kubectl patch ingress $ingressName --type "json" -p "[{'op':'add','path':'/spec/rules/-','value':{'host':'${serviceName}.${domainName}','http':{'paths':[{'backend':{'service':{'name':'${serviceName}','port':{'number':80}}},'path':'/','pathType':'Prefix'}]}}}]"
       ;;
 
       "Deleted")
         echo "Service ${serviceName} was deleted: [subdomain-mapper/ingress: ${ingressName}]"
-        index=$(kubectl get ing $ingressName -o json | jq -r ".spec.rules | map(.host == \"${serviceName}.andreisurugiu.com\") | index(true)")
+        index=$(kubectl get ing $ingressName -o json | jq -r ".spec.rules | map(.host == \"${serviceName}.${domainName}\") | index(true)")
         kubectl patch ingress $ingressName --type=json -p="[{'op':'remove', 'path': '/spec/rules/$index'}]"
       ;;
 

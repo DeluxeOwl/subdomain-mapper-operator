@@ -19,6 +19,13 @@ The services must have the following annotation:
 ```yaml
 annotations:
   subdomain-mapper/ingress: "your-ingress-name"
+  subdomain-mapper/domain: "your-domain"
+```
+**example:**  
+```yaml
+annotations:
+  subdomain-mapper/ingress: "main-ingress"
+  subdomain-mapper/domain: "andreisurugiu.com"
 ```
 
 You need to specify the ingress to add the hosts to.
@@ -34,6 +41,19 @@ kubectl apply -f https://raw.githubusercontent.com/DeluxeOwl/subdomain-mapper-op
 # example service and pod
 kubectl apply -f https://raw.githubusercontent.com/DeluxeOwl/subdomain-mapper-operator/main/examples/example.yaml
 ```
+
+## Development
+
+1. Build it yourself (multi-arch):  
+```sh
+docker buildx ls
+docker buildx create --name multi-arch
+docker buildx use multi-arch
+docker buildx inspect --bootstrap
+docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t username/subdomain-mapper:latest --push .
+```  
+2. Change the image from [operator.yaml](operator.yaml) to use your image.
+
 
 ### todo
 - add tests

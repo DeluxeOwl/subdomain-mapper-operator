@@ -18,6 +18,7 @@ metadata:
   name: automatic-nginx-subdomain
   annotations:
     subdomain-mapper/ingress: "main-ingress"
+    subdomain-mapper/domain: "andreisurugiu.com"
 spec:
   ports:
     - name: 80-80
